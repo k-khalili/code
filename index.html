@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alex Rivera — Portfolio</title>
+    <title>Alex Rivera</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
@@ -20,41 +20,49 @@
         <a class="nav-logo" href="#hero">AR</a>
         <ul class="nav-links">
           <li><a href="#about">About</a></li>
-          <li><a href="#work">Work</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#recommendations">Recs</a></li>
-          <li><a href="#contact" class="nav-cta">Contact</a></li>
+          <li><a href="#work">Experience</a></li>
+          <li><a href="#projects">Work</a></li>
+          <li><a href="#recommendations">Endorsements</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
     </nav>
 
     <!-- HERO -->
     <section id="hero">
-      <canvas id="particles"></canvas>
-      <div class="hero-content">
-        <p class="hero-eyebrow">Hi, I'm</p>
-        <h1 class="hero-name">Alex Rivera</h1>
-        <p class="hero-title">Software Engineer &amp; Creative Builder</p>
-        <p class="hero-tagline">
-          I design and build things for the internet — with a focus on clean
-          code, great UX, and ideas that actually matter.
+      <div class="hero-inner">
+        <p class="hero-eyebrow">
+          <span class="eyebrow-line"></span>
+          Builder &amp; Operator
         </p>
-        <div class="hero-actions">
-          <a href="#projects" class="btn-primary">See My Work</a>
-          <a href="#contact" class="btn-ghost">Get In Touch</a>
-        </div>
+        <h1 class="hero-name" id="hero-name">Alex Rivera</h1>
+        <p class="hero-descriptor">
+          Engineering leader. Founder. Trusted by teams building things that matter.
+        </p>
+        <div class="hero-rule"></div>
+        <a href="#about" class="hero-cta">Discover more <span>↓</span></a>
       </div>
-      <div class="hero-scroll-hint">scroll down ↓</div>
+      <div class="hero-index">
+        <span>Est. 1998</span>
+        <span>San Francisco</span>
+      </div>
     </section>
 
     <!-- ABOUT -->
     <section id="about" class="section">
       <div class="container">
-        <h2 class="section-title reveal">My Story</h2>
-        <p class="section-subtitle reveal">A life lived in curiosity.</p>
-
+        <div class="section-header reveal">
+          <span class="section-number">01</span>
+          <h2 class="section-title">The Story</h2>
+        </div>
         <div class="about-grid">
-          <div class="about-bio reveal">
+          <div class="about-statement reveal">
+            <p class="lead">
+              Curiosity before credentials.<br />
+              Results before recognition.
+            </p>
+          </div>
+          <div class="about-body reveal">
             <p>
               I grew up in a small coastal town where I spent more time taking
               apart old computers than playing outside. That curiosity turned
@@ -64,51 +72,56 @@
             <p>
               After studying Computer Science at State University, I moved to
               the city and started working on products used by millions of
-              people. I've worn a lot of hats — engineer, founder, mentor — but
-              the thread that connects them all is a love for solving hard
-              problems with elegant solutions.
+              people. I’ve worn a lot of hats — engineer, founder, mentor — but
+              the thread connecting them is a commitment to solving hard
+              problems with elegance and intention.
             </p>
             <p>
-              Outside of work I'm into photography, distance running, and
-              convincing people that pineapple belongs on pizza.
+              Outside of work: photography, distance running, and a deeply held
+              conviction that pineapple belongs on pizza.
             </p>
           </div>
+        </div>
 
-          <div class="timeline">
-            <div class="timeline-item reveal">
-              <span class="timeline-year">1998</span>
-              <div class="timeline-content">
-                <h4>Born in Santa Cruz, CA</h4>
-                <p>Grew up near the ocean with a deep love for nature and technology.</p>
-              </div>
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <span class="t-year">1998</span>
+            <div class="t-rule"></div>
+            <div class="t-body">
+              <h4>Born, Santa Cruz CA</h4>
+              <p>Grew up near the ocean with a deep fascination for how things work.</p>
             </div>
-            <div class="timeline-item reveal">
-              <span class="timeline-year">2012</span>
-              <div class="timeline-content">
-                <h4>First Line of Code</h4>
-                <p>Built a terrible Flash game and thought I was a genius. I was 14.</p>
-              </div>
+          </div>
+          <div class="timeline-item reveal">
+            <span class="t-year">2012</span>
+            <div class="t-rule"></div>
+            <div class="t-body">
+              <h4>First Line of Code</h4>
+              <p>Built a Flash game at 14. Terrible product. Formative experience.</p>
             </div>
-            <div class="timeline-item reveal">
-              <span class="timeline-year">2016</span>
-              <div class="timeline-content">
-                <h4>Started CS at State University</h4>
-                <p>Studied algorithms by day, shipped side projects by night.</p>
-              </div>
+          </div>
+          <div class="timeline-item reveal">
+            <span class="t-year">2016</span>
+            <div class="t-rule"></div>
+            <div class="t-body">
+              <h4>State University, Computer Science</h4>
+              <p>Studied algorithms by day. Shipped side projects by night.</p>
             </div>
-            <div class="timeline-item reveal">
-              <span class="timeline-year">2020</span>
-              <div class="timeline-content">
-                <h4>First Full-Time Role</h4>
-                <p>Joined a fast-growing startup as engineer #4. Learned everything the hard way.</p>
-              </div>
+          </div>
+          <div class="timeline-item reveal">
+            <span class="t-year">2020</span>
+            <div class="t-rule"></div>
+            <div class="t-body">
+              <h4>First Full-Time Role</h4>
+              <p>Engineer #4 at a venture-backed startup. Learned everything the hard way.</p>
             </div>
-            <div class="timeline-item reveal">
-              <span class="timeline-year">2023</span>
-              <div class="timeline-content">
-                <h4>Co-Founded a Product Studio</h4>
-                <p>Building tools for the next generation of creators. Still going.</p>
-              </div>
+          </div>
+          <div class="timeline-item reveal">
+            <span class="t-year">2023</span>
+            <div class="t-rule"></div>
+            <div class="t-body">
+              <h4>Co-Founded Craft Studio</h4>
+              <p>Building tools for the next generation of independent creators.</p>
             </div>
           </div>
         </div>
@@ -118,57 +131,48 @@
     <!-- WORK -->
     <section id="work" class="section section-alt">
       <div class="container">
-        <h2 class="section-title reveal">Work Experience</h2>
-        <p class="section-subtitle reveal">Places I've called home.</p>
-
+        <div class="section-header reveal">
+          <span class="section-number">02</span>
+          <h2 class="section-title">Experience</h2>
+        </div>
         <div class="work-list">
-          <div class="work-card reveal">
-            <div class="work-header">
-              <div>
-                <h3>Co-Founder &amp; CTO</h3>
-                <span class="work-company">Craft Studio</span>
-              </div>
+          <div class="work-item reveal">
+            <div class="work-meta">
               <span class="work-date">2023 — Present</span>
+              <span class="work-company">Craft Studio</span>
             </div>
-            <p>Leading product and engineering for a small studio building SaaS tools for independent creators. Responsible for architecture, hiring, and shipping.</p>
-            <div class="tag-list">
-              <span class="tag">React</span>
-              <span class="tag">Node.js</span>
-              <span class="tag">PostgreSQL</span>
-              <span class="tag">AWS</span>
+            <div class="work-detail">
+              <h3>Co-Founder &amp; CTO</h3>
+              <p>Leading product and engineering for a studio building SaaS tools for independent creators. Responsible for architecture, team, and execution.</p>
+              <div class="work-tags">
+                <span>React</span><span>Node.js</span><span>PostgreSQL</span><span>AWS</span>
+              </div>
             </div>
           </div>
-
-          <div class="work-card reveal">
-            <div class="work-header">
-              <div>
-                <h3>Senior Software Engineer</h3>
-                <span class="work-company">Acme Corp</span>
-              </div>
+          <div class="work-item reveal">
+            <div class="work-meta">
               <span class="work-date">2021 — 2023</span>
+              <span class="work-company">Acme Corp</span>
             </div>
-            <p>Built and maintained the core product API serving 2M+ daily active users. Led a team of 5 engineers, drove a 40% reduction in p99 latency.</p>
-            <div class="tag-list">
-              <span class="tag">TypeScript</span>
-              <span class="tag">GraphQL</span>
-              <span class="tag">Kubernetes</span>
-              <span class="tag">Redis</span>
+            <div class="work-detail">
+              <h3>Senior Software Engineer</h3>
+              <p>Built and maintained the core product API serving 2M+ daily active users. Led a team of 5 engineers. Drove a 40% reduction in p99 latency.</p>
+              <div class="work-tags">
+                <span>TypeScript</span><span>GraphQL</span><span>Kubernetes</span><span>Redis</span>
+              </div>
             </div>
           </div>
-
-          <div class="work-card reveal">
-            <div class="work-header">
-              <div>
-                <h3>Software Engineer</h3>
-                <span class="work-company">Launchpad Inc.</span>
-              </div>
+          <div class="work-item reveal">
+            <div class="work-meta">
               <span class="work-date">2020 — 2021</span>
+              <span class="work-company">Launchpad Inc.</span>
             </div>
-            <p>First full-time role. Joined as engineer #4 and helped scale the platform from 0 to 100k users. Wore every hat imaginable.</p>
-            <div class="tag-list">
-              <span class="tag">Vue.js</span>
-              <span class="tag">Python</span>
-              <span class="tag">Django</span>
+            <div class="work-detail">
+              <h3>Software Engineer</h3>
+              <p>Joined as engineer #4. Helped scale the platform from zero to 100,000 users. Wore every hat imaginable.</p>
+              <div class="work-tags">
+                <span>Vue.js</span><span>Python</span><span>Django</span>
+              </div>
             </div>
           </div>
         </div>
@@ -178,136 +182,125 @@
     <!-- PROJECTS -->
     <section id="projects" class="section">
       <div class="container">
-        <h2 class="section-title reveal">Projects</h2>
-        <p class="section-subtitle reveal">Things I've built for fun and profit.</p>
-
+        <div class="section-header reveal">
+          <span class="section-number">03</span>
+          <h2 class="section-title">Selected Work</h2>
+        </div>
         <div class="projects-grid">
-          <div class="project-card reveal">
-            <div class="project-top">
-              <span class="project-icon">🗂️</span>
+          <div class="project-item reveal">
+            <div class="project-header">
+              <h3>Notion for Makers</h3>
               <div class="project-links">
-                <a href="#" aria-label="GitHub">GH</a>
-                <a href="#" aria-label="Live">↗</a>
+                <a href="#">GH</a>
+                <a href="#">↗</a>
               </div>
             </div>
-            <h3>Notion for Makers</h3>
-            <p>A flexible workspace app tailored for product builders — with built-in roadmap, spec, and changelog views.</p>
-            <div class="tag-list">
-              <span class="tag">React</span>
-              <span class="tag">Supabase</span>
-              <span class="tag">TailwindCSS</span>
+            <p>A flexible workspace for product builders with roadmap, spec, and changelog views built in.</p>
+            <div class="work-tags">
+              <span>React</span><span>Supabase</span><span>TailwindCSS</span>
             </div>
           </div>
-
-          <div class="project-card reveal">
-            <div class="project-top">
-              <span class="project-icon">📸</span>
+          <div class="project-item reveal">
+            <div class="project-header">
+              <h3>Exposur</h3>
               <div class="project-links">
-                <a href="#" aria-label="GitHub">GH</a>
-                <a href="#" aria-label="Live">↗</a>
+                <a href="#">GH</a>
+                <a href="#">↗</a>
               </div>
             </div>
-            <h3>Exposur</h3>
-            <p>A minimal photo portfolio generator. Upload your shots, pick a theme, get a public gallery link in under a minute.</p>
-            <div class="tag-list">
-              <span class="tag">Next.js</span>
-              <span class="tag">Cloudflare R2</span>
-              <span class="tag">Vercel</span>
+            <p>Minimal photo portfolio generator. Upload shots, pick a theme, get a public gallery in under a minute.</p>
+            <div class="work-tags">
+              <span>Next.js</span><span>Cloudflare R2</span><span>Vercel</span>
             </div>
           </div>
-
-          <div class="project-card reveal">
-            <div class="project-top">
-              <span class="project-icon">🏃</span>
+          <div class="project-item reveal">
+            <div class="project-header">
+              <h3>PaceLog</h3>
               <div class="project-links">
-                <a href="#" aria-label="GitHub">GH</a>
-                <a href="#" aria-label="Live">↗</a>
+                <a href="#">GH</a>
+                <a href="#">↗</a>
               </div>
             </div>
-            <h3>PaceLog</h3>
-            <p>A dead-simple running journal with smart pace analytics and training plan generation. Built for myself, used by thousands.</p>
-            <div class="tag-list">
-              <span class="tag">SvelteKit</span>
-              <span class="tag">SQLite</span>
-              <span class="tag">Fly.io</span>
+            <p>A dead-simple running journal with smart pace analytics and training plan generation.</p>
+            <div class="work-tags">
+              <span>SvelteKit</span><span>SQLite</span><span>Fly.io</span>
             </div>
           </div>
-
-          <div class="project-card reveal">
-            <div class="project-top">
-              <span class="project-icon">🤖</span>
+          <div class="project-item reveal">
+            <div class="project-header">
+              <h3>Briefbot</h3>
               <div class="project-links">
-                <a href="#" aria-label="GitHub">GH</a>
-                <a href="#" aria-label="Live">↗</a>
+                <a href="#">GH</a>
+                <a href="#">↗</a>
               </div>
             </div>
-            <h3>Briefbot</h3>
-            <p>A Slack bot that summarizes long threads into 3-bullet digests using an LLM. Saved my team hours of reading.</p>
-            <div class="tag-list">
-              <span class="tag">Python</span>
-              <span class="tag">OpenAI API</span>
-              <span class="tag">Slack SDK</span>
+            <p>A Slack bot that summarizes long threads into 3-bullet digests. Saved the team hours of reading weekly.</p>
+            <div class="work-tags">
+              <span>Python</span><span>OpenAI API</span><span>Slack SDK</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- RECOMMENDATIONS -->
+    <!-- ENDORSEMENTS -->
     <section id="recommendations" class="section section-alt">
       <div class="container">
-        <h2 class="section-title reveal">Recommendations</h2>
-        <p class="section-subtitle reveal">Kind words from people I've worked with.</p>
-
-        <div class="recs-grid">
-          <div class="rec-card reveal">
-            <p class="rec-quote">"Alex is one of the most thoughtful engineers I've worked with. They don't just write great code — they make everyone around them better."</p>
-            <div class="rec-author">
-              <div class="rec-avatar">JL</div>
-              <div>
-                <strong>Jamie Lee</strong>
-                <span>VP Engineering, Acme Corp</span>
-              </div>
+        <div class="section-header reveal">
+          <span class="section-number">04</span>
+          <h2 class="section-title">Endorsements</h2>
+        </div>
+        <div class="recs-list">
+          <div class="rec-item reveal">
+            <p class="rec-quote">
+              “Alex is one of the most thoughtful engineers I’ve worked with.
+              They don’t just write great code — they make everyone around them better.”
+            </p>
+            <div class="rec-attr">
+              <span class="rec-name">Jamie Lee</span>
+              <span class="rec-title">VP Engineering, Acme Corp</span>
             </div>
           </div>
-
-          <div class="rec-card reveal">
-            <p class="rec-quote">"Working with Alex on the API rewrite was a masterclass in clear thinking. Complex problems became obvious once they explained them."</p>
-            <div class="rec-author">
-              <div class="rec-avatar">MT</div>
-              <div>
-                <strong>Marcus Torres</strong>
-                <span>Staff Engineer, Acme Corp</span>
-              </div>
+          <div class="rec-item reveal">
+            <p class="rec-quote">
+              “Working with Alex on the API rewrite was a masterclass in clear thinking.
+              Complex problems became obvious once they explained them.”
+            </p>
+            <div class="rec-attr">
+              <span class="rec-name">Marcus Torres</span>
+              <span class="rec-title">Staff Engineer, Acme Corp</span>
             </div>
           </div>
-
-          <div class="rec-card reveal">
-            <p class="rec-quote">"Alex is the rare person who can go from whiteboard to shipped product in record time without cutting corners. They're the first person I'd call for any technical co-founder role."</p>
-            <div class="rec-author">
-              <div class="rec-avatar">SP</div>
-              <div>
-                <strong>Sarah Park</strong>
-                <span>CEO, Launchpad Inc.</span>
-              </div>
+          <div class="rec-item reveal">
+            <p class="rec-quote">
+              “Alex is the rare person who can go from whiteboard to shipped product in record
+              time without cutting corners. The first person I’d call for any technical co-founder role.”
+            </p>
+            <div class="rec-attr">
+              <span class="rec-name">Sarah Park</span>
+              <span class="rec-title">CEO, Launchpad Inc.</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CONTACT / FOOTER -->
+    <!-- CONTACT -->
     <footer id="contact">
       <div class="container">
-        <h2 class="reveal">Let's build something.</h2>
-        <p class="reveal">I'm always open to interesting projects and conversations.</p>
-        <a href="mailto:alex@example.com" class="btn-primary reveal">Say Hello →</a>
-        <div class="footer-links reveal">
-          <a href="#">GitHub</a>
-          <a href="#">LinkedIn</a>
-          <a href="#">Twitter / X</a>
+        <div class="footer-top reveal">
+          <h2>Let’s talk.</h2>
+          <a href="mailto:alex@example.com" class="footer-cta">alex@example.com →</a>
         </div>
-        <p class="footer-copy">© 2025 Alex Rivera. Built with ☕ and vanilla JS.</p>
+        <div class="footer-rule reveal"></div>
+        <div class="footer-bottom reveal">
+          <span>© 2025 Alex Rivera</span>
+          <div class="footer-links">
+            <a href="#">GitHub</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter</a>
+          </div>
+        </div>
       </div>
     </footer>
 

@@ -1,93 +1,8 @@
 /* ============================================================
-   PARTICLE BACKGROUND
-   ============================================================ */
-(function () {
-  const canvas = document.getElementById("particles");
-  const ctx = canvas.getContext("2d");
-
-  let W, H, particles;
-  const COUNT = 80;
-  const MAX_DIST = 130;
-  const SPEED = 0.4;
-
-  function resize() {
-    W = canvas.width = canvas.offsetWidth;
-    H = canvas.height = canvas.offsetHeight;
-  }
-
-  function randomBetween(a, b) {
-    return a + Math.random() * (b - a);
-  }
-
-  function createParticles() {
-    particles = Array.from({ length: COUNT }, () => ({
-      x: randomBetween(0, W),
-      y: randomBetween(0, H),
-      vx: randomBetween(-SPEED, SPEED),
-      vy: randomBetween(-SPEED, SPEED),
-      r: randomBetween(1.5, 3),
-    }));
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-
-    for (const p of particles) {
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < 0) p.x = W;
-      if (p.x > W) p.x = 0;
-      if (p.y < 0) p.y = H;
-      if (p.y > H) p.y = 0;
-    }
-
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < MAX_DIST) {
-          const alpha = (1 - dist / MAX_DIST) * 0.35;
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
-          ctx.lineWidth = 1;
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    for (const p of particles) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(99, 102, 241, 0.7)";
-      ctx.fill();
-    }
-
-    requestAnimationFrame(draw);
-  }
-
-  function init() {
-    resize();
-    createParticles();
-    draw();
-  }
-
-  window.addEventListener("resize", () => {
-    resize();
-    createParticles();
-  });
-
-  init();
-})();
-
-
-/* ============================================================
    SCROLL REVEAL
    ============================================================ */
 (function () {
-  const revealEls = document.querySelectorAll(".reveal");
+  const els = document.querySelectorAll(".reveal");
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -98,32 +13,80 @@
         }
       });
     },
-    { threshold: 0.12 }
+    { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
   );
 
-  revealEls.forEach((el, i) => {
-    el.style.transitionDelay = `${(i % 6) * 0.08}s`;
-    observer.observe(el);
+  const parents = new Map();
+  els.forEach((el) => {
+    const key = el.parentElement;
+    if (!parents.has(key)) parents.set(key, []);
+    parents.get(key).push(el);
+  });
+
+  parents.forEach((children) => {
+    children.forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.1}s`;
+      observer.observe(el);
+    });
   });
 })();
 
 
 /* ============================================================
-   NAV — highlight on scroll
+   FOOTER RULE DRAW
+   ============================================================ */
+(function () {
+  const rule = document.querySelector(".footer-rule");
+  if (!rule) return;
+
+  rule.style.transform = "scaleX(0)";
+  rule.style.transition = "transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1)";
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        rule.style.transform = "scaleX(1)";
+        observer.disconnect();
+      }
+    },
+    { threshold: 0.5 }
+  );
+
+  observer.observe(rule);
+})();
+
+
+/* ============================================================
+   NAV ACTIVE STATE
    ============================================================ */
 (function () {
   const sections = document.querySelectorAll("section[id], footer[id]");
   const navLinks = document.querySelectorAll(".nav-links a");
 
-  window.addEventListener("scroll", () => {
+  const activate = () => {
     let current = "";
     sections.forEach((sec) => {
-      if (window.scrollY >= sec.offsetTop - 120) {
+      if (window.scrollY >= sec.offsetTop - 100) {
         current = sec.getAttribute("id");
       }
     });
     navLinks.forEach((a) => {
-      a.style.color = a.getAttribute("href") === `#${current}` ? "#e8eaf0" : "";
+      const isActive = a.getAttribute("href") === `#${current}`;
+      a.style.color = isActive ? "var(--text)" : "";
     });
-  }, { passive: true });
+  };
+
+  window.addEventListener("scroll", activate, { passive: true });
+  activate();
+})();
+
+
+/* ============================================================
+   HERO NAME WORD SPLIT
+   ============================================================ */
+(function () {
+  const nameEl = document.getElementById("hero-name");
+  if (!nameEl) return;
+  const words = nameEl.textContent.trim().split(" ");
+  nameEl.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(" ");
 })();
