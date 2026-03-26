@@ -111,9 +111,21 @@ a { color: inherit; text-decoration: none; }
 }
 
 .hero-inner {
+  position: relative;
+  z-index: 1;
   max-width: var(--max-w);
   margin: 0 auto;
   width: 100%;
+}
+
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .hero-eyebrow {
@@ -224,6 +236,8 @@ a { color: inherit; text-decoration: none; }
   max-width: var(--max-w);
   margin: 0 auto;
   padding: 0 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 .section-header {
