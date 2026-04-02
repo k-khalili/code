@@ -95,6 +95,108 @@
 
 
 /* ============================================================
+   PROJECT EXPAND (ACCORDION LOGIC)
+   ============================================================ */
+(function() {
+  const items = document.querySelectorAll(".project-item");
+  
+  items.forEach(item => {
+    // Make the entire card organically clickable
+    item.addEventListener("click", (e) => {
+      // Don't toggle if they clicked an external link (if we ever re-add one)
+      if (e.target.tagName && e.target.tagName.toLowerCase() === 'a') return;
+
+      const isExpanded = item.classList.contains("is-expanded");
+      
+      // Smoothly retract all other projects
+      items.forEach(otherItem => {
+        if (otherItem !== item) {
+          otherItem.classList.remove("is-expanded");
+        }
+      });
+      
+      // Toggle the targeted project
+      if (isExpanded) {
+        item.classList.remove("is-expanded");
+      } else {
+        item.classList.add("is-expanded");
+      }
+    });
+  });
+
+  // Collapse all projects if clicking anywhere outside of them
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".project-item")) {
+      items.forEach(item => item.classList.remove("is-expanded"));
+    }
+  });
+
+  // Collapse all projects if pressing the Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      items.forEach(item => item.classList.remove("is-expanded"));
+    }
+  });
+})();
+
+
+/* ============================================================
+   PHOTO CAROUSEL (NATIVE SCROLL)
+   ============================================================ */
+(function () {
+  const track = document.querySelector('.carousel-track');
+  if (!track) return;
+
+  const prevBtn = document.querySelector('.carousel-prev');
+  const nextBtn = document.querySelector('.carousel-next');
+  
+  // Calculate width of one slide + gap for scrolling
+  function scrollBySlide(direction) {
+    const firstSlide = track.querySelector('.carousel-slide');
+    if (!firstSlide) return;
+    
+    // We add gap value logic accurately
+    const gap = 16; 
+    const scrollAmount = firstSlide.offsetWidth + gap;
+    
+    track.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+
+  // Bind controls
+  if (prevBtn) prevBtn.addEventListener('click', () => scrollBySlide(-1));
+  if (nextBtn) nextBtn.addEventListener('click', () => scrollBySlide(1));
+
+  // Click on slide to center it
+  const slides = track.querySelectorAll('.carousel-slide');
+  slides.forEach(slide => {
+    slide.addEventListener('click', () => {
+      slide.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
+  });
+
+  // Disable/enable buttons based on scroll position
+  function updateButtons() {
+    if (!prevBtn || !nextBtn) return;
+    const scrollLeft = track.scrollLeft;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    
+    // Use a small buffer to account for sub-pixel rounding
+    prevBtn.disabled = scrollLeft <= 2;
+    nextBtn.disabled = scrollLeft >= maxScroll - 2;
+  }
+
+  track.addEventListener('scroll', updateButtons, { passive: true });
+  window.addEventListener('resize', updateButtons);
+  
+  // Initial check (give it a tiny delay to ensure layout computation is complete)
+  setTimeout(updateButtons, 50);
+})();
+
+
+/* ============================================================
    STARFIELD ANIMATION
    ============================================================ */
 (function () {
@@ -105,6 +207,20 @@
   let width, height, docHeight, heroHeight;
   let stars = [];
   let startTime = Date.now();
+
+  let targetX = 0, targetY = 0;
+  let clickForce = 0;
+  
+  // Track continuous/rapid clicks for stacking momentum
+  document.addEventListener("mousedown", (e) => {
+    // Only apply gravity if clicking on the background (not inside content elements)
+    if (!e.target.closest(".container") && !e.target.closest(".project-item")) {
+      targetX = e.pageX;
+      targetY = e.pageY;
+      // Spike the force (max cap at 8 to prevent absolute chaos)
+      clickForce = Math.min(clickForce + 2.0, 8.0);
+    }
+  });
 
   function resize() {
     width = window.innerWidth;
@@ -129,11 +245,19 @@
   // Maintain a nice density based on the document height
   const numStars = Math.floor((docHeight / height) * 200);
   for (let i = 0; i < numStars; i++) {
+    let baseSpd = Math.random() * 0.3 + 0.05;
+    let startX = Math.random() * width;
+    let startY = Math.random() * docHeight;
+
     stars.push({
-      x: Math.random() * width,
-      y: Math.random() * docHeight,
+      anchorX: startX,
+      anchorY: startY,
+      x: startX,
+      y: startY,
       size: Math.random() * 1.5,
-      speed: Math.random() * 0.3 + 0.05,
+      baseSpeed: baseSpd,
+      vx: 0,
+      vy: 0,
       alpha: Math.random()
     });
   }
@@ -147,6 +271,9 @@
     // Global fade-in: starts at 0, fully visible at 30s
     let fadeProgress = Math.min(1, Math.max(0, elapsed / 30000));
     
+    // Decay the global click force smoothly back to 0
+    clickForce *= 0.95;
+    
     let scrollY = window.scrollY;
 
     stars.forEach(star => {
@@ -155,19 +282,64 @@
       if (star.alpha > 1) star.alpha = 1;
       if (star.alpha < 0.1) star.alpha = 0.1;
 
-      // Make them fall downwards! (star.y += speed)
-      star.y += star.speed;
-      star.x += star.speed * 0.2;
+      // 1. Update the normal drifting anchor
+      star.anchorX += star.baseSpeed * 0.2;
+      star.anchorY += star.baseSpeed;
+
+      // Wrap anchors and visual coordinates together to prevent rubber-band snapping across the whole screen length
+      if (star.anchorY > docHeight + 50) {
+        let offset = star.anchorY - (-10);
+        star.anchorY -= offset;
+        star.y -= offset;
+      } else if (star.anchorY < -50) {
+        let offset = (docHeight + 10) - star.anchorY;
+        star.anchorY += offset;
+        star.y += offset;
+      }
       
-      // Reset if they fall past the bottom
-      if (star.y > docHeight) {
-        star.y = 0;
-        star.x = Math.random() * width;
+      if (star.anchorX > width + 50) {
+        let offset = star.anchorX - (-10);
+        star.anchorX -= offset;
+        star.x -= offset;
+      } else if (star.anchorX < -50) {
+        let offset = (width + 10) - star.anchorX;
+        star.anchorX += offset;
+        star.x += offset;
       }
-      if (star.x > width) {
-        star.x = 0;
-        star.y = Math.random() * docHeight;
+
+      // 2. Calculate Spring Force (pulling them back to their natural even distribution)
+      let dxAnchor = star.anchorX - star.x;
+      let dyAnchor = star.anchorY - star.y;
+      
+      const springK = 0.018; // Stiffness of the return rubber banding
+      let fx = dxAnchor * springK;
+      let fy = dyAnchor * springK;
+      
+      // 3. Apply magnetic "black hole" pull if clicked recently
+      if (clickForce > 0.05) {
+        let dxCursor = targetX - star.x;
+        let dyCursor = targetY - star.y;
+        let distCursor = Math.sqrt(dxCursor * dxCursor + dyCursor * dyCursor);
+        
+        if (distCursor > 5) {
+          // Pull force balanced against the spring return
+          let magnetStrength = clickForce * 1.5;
+          fx += (dxCursor / distCursor) * magnetStrength;
+          fy += (dyCursor / distCursor) * magnetStrength;
+        }
       }
+
+      // Apply net force to velocity
+      star.vx += fx;
+      star.vy += fy;
+
+      // Apply heavy friction/damping so they settle smoothly into place without oscillating wildly
+      star.vx *= 0.82;
+      star.vy *= 0.82;
+
+      // Apply the final velocity
+      star.x += star.vx;
+      star.y += star.vy;
 
       // Calculate screen Y based on scroll
       let screenY = star.y - scrollY;

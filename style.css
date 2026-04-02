@@ -427,6 +427,9 @@ a { color: inherit; text-decoration: none; }
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   transition: background 0.4s var(--ease);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
 }
 
 .project-item:hover { background: var(--surface); }
@@ -464,7 +467,103 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.85;
+  margin-bottom: 0;
+}
+
+/* Inline Accordion Expansion */
+.project-expanded-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s var(--ease);
+}
+
+.project-item.is-expanded .project-expanded-wrapper {
+  grid-template-rows: 1fr;
+}
+
+.project-expanded-content {
+  overflow: hidden;
+}
+
+.project-expanded-inner {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-top: 1px solid var(--border-mid);
+  margin-top: 1.5rem;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.4s var(--ease) 0.1s, transform 0.4s var(--ease) 0.1s;
+}
+
+.project-item.is-expanded .project-expanded-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-expanded-inner h4 {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.project-expanded-inner p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.85;
   margin-bottom: 1.5rem;
+}
+
+.project-expanded-inner p:last-child {
+  margin-bottom: 0;
+}
+
+.project-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto; 
+  padding-top: 2rem;
+}
+
+.project-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), background 0.3s var(--ease);
+}
+
+/* Optional hover states if people just hover the button itself */
+.project-toggle-btn:hover {
+  background: rgba(232, 222, 194, 0.08); /* slight gold wash */
+}
+
+/* If you hover the card, give the button a little nudge */
+.project-item:hover .project-toggle-btn {
+  transform: scale(1.1);
+}
+
+.toggle-icon {
+  font-size: 1.5rem;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* 135deg makes it spin further before resting as an 'X' */
+.project-item.is-expanded .toggle-icon {
+  transform: rotate(135deg);
 }
 
 /* ============================================================
@@ -625,6 +724,97 @@ footer {
 @keyframes expandLine {
   from { width: 0; opacity: 0; }
   to { width: 60px; opacity: 1; }
+}
+
+/* ============================================================
+   PHOTO CAROUSEL
+   ============================================================ */
+.photo-carousel {
+  margin-top: 5rem;
+  padding-bottom: 3rem;
+  width: 100%;
+  overflow: hidden; /* Hide vertical bleed out issues from scales */
+}
+
+.carousel-track {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* Add padding equal to center viewport calculation so start/end items snap exactly center */
+  padding: 1rem calc(50vw - 140px);
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-slide {
+  flex: 0 0 280px;
+  width: 280px;
+  height: 200px;
+  scroll-snap-align: center;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transform-origin: center center;
+  opacity: 0.85;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.carousel-slide:hover {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-slide img:not([src]),
+.carousel-slide img[src=""] {
+  display: none;
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.carousel-btn {
+  background: none;
+  border: 1px solid var(--border-mid);
+  color: var(--text-muted);
+  font-size: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.carousel-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
 }
 
 /* ============================================================
