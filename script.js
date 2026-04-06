@@ -1,5 +1,5 @@
 /* ============================================================
-   SCROLL REVEAL
+   SCROLL REVEAL — slow, deliberate
    ============================================================ */
 (function () {
   const els = document.querySelectorAll(".reveal");
@@ -16,6 +16,7 @@
     { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
   );
 
+  // Stagger items within the same parent container
   const parents = new Map();
   els.forEach((el) => {
     const key = el.parentElement;
@@ -33,7 +34,7 @@
 
 
 /* ============================================================
-   FOOTER RULE DRAW
+   FOOTER RULE DRAW — animates the horizontal line
    ============================================================ */
 (function () {
   const rule = document.querySelector(".footer-rule");
@@ -57,7 +58,7 @@
 
 
 /* ============================================================
-   NAV ACTIVE STATE
+   NAV — subtle active state on scroll
    ============================================================ */
 (function () {
   const sections = document.querySelectorAll("section[id], footer[id]");
@@ -82,13 +83,121 @@
 
 
 /* ============================================================
-   HERO NAME WORD SPLIT
+   HERO NAME — word split already in HTML, no JS needed.
+   This just ensures the words are wrapped correctly.
    ============================================================ */
 (function () {
   const nameEl = document.getElementById("hero-name");
   if (!nameEl) return;
   const words = nameEl.textContent.trim().split(" ");
   nameEl.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(" ");
+})();
+
+
+/* ============================================================
+   PROJECT EXPAND (ACCORDION LOGIC)
+   ============================================================ */
+(function() {
+  const items = document.querySelectorAll(".project-item");
+  
+  items.forEach(item => {
+    // Make the entire card organically clickable
+    item.addEventListener("click", (e) => {
+      // Don't toggle if they clicked an external link (if we ever re-add one)
+      if (e.target.tagName && e.target.tagName.toLowerCase() === 'a') return;
+
+      const isExpanded = item.classList.contains("is-expanded");
+      
+      // Smoothly retract all other projects
+      items.forEach(otherItem => {
+        if (otherItem !== item) {
+          otherItem.classList.remove("is-expanded");
+        }
+      });
+      
+      // Toggle the targeted project
+      if (isExpanded) {
+        item.classList.remove("is-expanded");
+      } else {
+        item.classList.add("is-expanded");
+      }
+    });
+  });
+
+  // Collapse all projects if clicking anywhere outside of them
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".project-item")) {
+      items.forEach(item => item.classList.remove("is-expanded"));
+    }
+  });
+
+  // Collapse all projects if pressing the Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      items.forEach(item => item.classList.remove("is-expanded"));
+    }
+  });
+})();
+
+
+/* ============================================================
+   PHOTO CAROUSEL (NATIVE SCROLL)
+   ============================================================ */
+(function () {
+  const track = document.querySelector('.carousel-track');
+  if (!track) return;
+
+  const prevBtn = document.querySelector('.carousel-prev');
+  const nextBtn = document.querySelector('.carousel-next');
+  
+  // Calculate width of one slide + gap for scrolling
+  function scrollBySlide(direction) {
+    const firstSlide = track.querySelector('.carousel-slide');
+    if (!firstSlide) return;
+    
+    // We add gap value logic accurately
+    const gap = 16; 
+    const scrollAmount = firstSlide.offsetWidth + gap;
+    
+    track.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+
+  // Bind controls
+  if (prevBtn) prevBtn.addEventListener('click', () => scrollBySlide(-1));
+  if (nextBtn) nextBtn.addEventListener('click', () => scrollBySlide(1));
+
+  // Click on slide to center it
+  const slides = track.querySelectorAll('.carousel-slide');
+  slides.forEach(slide => {
+    slide.addEventListener('click', () => {
+      const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+      const trackCenter = track.clientWidth / 2;
+      track.scrollTo({
+        left: slideCenter - trackCenter,
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Disable/enable buttons based on scroll position
+  function updateButtons() {
+    if (!prevBtn || !nextBtn) return;
+    const scrollLeft = track.scrollLeft;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    
+    // Use a small buffer to account for sub-pixel rounding
+    prevBtn.disabled = scrollLeft <= 2;
+    nextBtn.disabled = scrollLeft >= maxScroll - 2;
+  }
+
+  track.addEventListener('scroll', updateButtons, { passive: true });
+  window.addEventListener('resize', updateButtons);
+  
+  // Initial check (give it a tiny delay to ensure layout computation is complete)
+  setTimeout(updateButtons, 50);
 })();
 
 
@@ -127,11 +236,19 @@
   // Maintain a nice density based on the document height
   const numStars = Math.floor((docHeight / height) * 200);
   for (let i = 0; i < numStars; i++) {
+    let baseSpd = Math.random() * 0.3 + 0.05;
+    let startX = Math.random() * width;
+    let startY = Math.random() * docHeight;
+
     stars.push({
-      x: Math.random() * width,
-      y: Math.random() * docHeight,
+      anchorX: startX,
+      anchorY: startY,
+      x: startX,
+      y: startY,
       size: Math.random() * 1.5,
-      speed: Math.random() * 0.3 + 0.05,
+      baseSpeed: baseSpd,
+      vx: 0,
+      vy: 0,
       alpha: Math.random()
     });
   }
@@ -153,32 +270,64 @@
       if (star.alpha > 1) star.alpha = 1;
       if (star.alpha < 0.1) star.alpha = 0.1;
 
-      // Move subtle up and right
-      star.y -= star.speed;
-      star.x += star.speed * 0.2;
-      
-      if (star.y < 0) {
-        star.y = docHeight;
-        star.x = Math.random() * width;
+      // 1. Update the normal drifting anchor
+      star.anchorX += star.baseSpeed * 0.2;
+      star.anchorY += star.baseSpeed;
+
+      // Wrap anchors and visual coordinates together to prevent rubber-band snapping across the whole screen length
+      if (star.anchorY > docHeight + 50) {
+        let offset = star.anchorY - (-10);
+        star.anchorY -= offset;
+        star.y -= offset;
+      } else if (star.anchorY < -50) {
+        let offset = (docHeight + 10) - star.anchorY;
+        star.anchorY += offset;
+        star.y += offset;
       }
-      if (star.x > width) {
-        star.x = 0;
-        star.y = Math.random() * docHeight;
+      
+      if (star.anchorX > width + 50) {
+        let offset = star.anchorX - (-10);
+        star.anchorX -= offset;
+        star.x -= offset;
+      } else if (star.anchorX < -50) {
+        let offset = (width + 10) - star.anchorX;
+        star.anchorX += offset;
+        star.x += offset;
       }
 
-      // Calculate screen Y
+      // 2. Calculate Spring Force (pulling them back to their natural even distribution)
+      let dxAnchor = star.anchorX - star.x;
+      let dyAnchor = star.anchorY - star.y;
+      
+      const springK = 0.018; // Stiffness of the return rubber banding
+      let fx = dxAnchor * springK;
+      let fy = dyAnchor * springK;
+      
+      // Apply net force to velocity
+      star.vx += fx;
+      star.vy += fy;
+
+      // Apply heavy friction/damping so they settle smoothly into place without oscillating wildly
+      star.vx *= 0.82;
+      star.vy *= 0.82;
+
+      // Apply the final velocity
+      star.x += star.vx;
+      star.y += star.vy;
+
+      // Calculate screen Y based on scroll
       let screenY = star.y - scrollY;
 
       // Only draw if within viewport
       if (screenY >= -5 && screenY <= height + 5) {
-        // Hide if below the trickle line
+        // Hide if below the current trickle line
         if (star.y > trickleY) return;
 
         let currentAlpha = star.alpha;
         
-        // If the star is below the initial hero section, apply the 30-second global fade-in
+        // Stars below the hero start slightly transparent and become fully solid at 30s
         if (star.y > heroHeight) {
-          currentAlpha = star.alpha * fadeProgress;
+          currentAlpha = star.alpha * (0.15 + 0.85 * fadeProgress);
         }
 
         ctx.globalAlpha = currentAlpha;
