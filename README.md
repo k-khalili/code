@@ -1,23 +1,22 @@
-# My First Website
+# Kasra Khalili — Portfolio
 
-A simple website built with HTML, CSS, and JavaScript.
+A personal portfolio website for Kasra Khalili, built dynamically with modern HTML, modular CSS, and Javascript.
 
-## Files
+## Features
+- **Interactive Story Carousel**: A fully native CSS scroll-snap image gallery that elegantly supports desktop trackpads and mobile interactions.
+- **Dynamic Projects Expand**: Interactive project grid using modern CSS and Javascript accordions.
+- **Responsive Layout**: Designed thoroughly with modern media queries and typographic rules for a high-end experience across all devices.
 
-- `index.html` — the page structure
-- `style.css` — visual styling
-- `script.js` — interactivity
+## Local Development
 
-## How to Run
+To run this site on your local machine:
 
-1. Open a terminal in this folder
-2. Run the following command:
+1. Clone the repository
+2. From the root directory, start the included local python server:
+   ```bash
+   python3 -m http.server 8080
+   ```
+3. Visit [http://localhost:8080](http://localhost:8080) in your browser.
 
-```bash
-python3 -m http.server 8080
-```
-
-3. Open your browser and go to `http://localhost:8080`
-4. You should see your website!
-
-To stop the server, press `Ctrl + C` in the terminal.
+## Deployment
+This project is completely static (HTML/CSS/JS) and can be dragged directly into standard hosting services like GitHub Pages or Vercel.

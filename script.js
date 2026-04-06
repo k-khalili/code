@@ -173,7 +173,12 @@
   const slides = track.querySelectorAll('.carousel-slide');
   slides.forEach(slide => {
     slide.addEventListener('click', () => {
-      slide.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+      const trackCenter = track.clientWidth / 2;
+      track.scrollTo({
+        left: slideCenter - trackCenter,
+        behavior: 'smooth'
+      });
     });
   });
 
@@ -207,20 +212,6 @@
   let width, height, docHeight, heroHeight;
   let stars = [];
   let startTime = Date.now();
-
-  let targetX = 0, targetY = 0;
-  let clickForce = 0;
-  
-  // Track continuous/rapid clicks for stacking momentum
-  document.addEventListener("mousedown", (e) => {
-    // Only apply gravity if clicking on the background (not inside content elements)
-    if (!e.target.closest(".container") && !e.target.closest(".project-item")) {
-      targetX = e.pageX;
-      targetY = e.pageY;
-      // Spike the force (max cap at 8 to prevent absolute chaos)
-      clickForce = Math.min(clickForce + 2.0, 8.0);
-    }
-  });
 
   function resize() {
     width = window.innerWidth;
@@ -271,9 +262,6 @@
     // Global fade-in: starts at 0, fully visible at 30s
     let fadeProgress = Math.min(1, Math.max(0, elapsed / 30000));
     
-    // Decay the global click force smoothly back to 0
-    clickForce *= 0.95;
-    
     let scrollY = window.scrollY;
 
     stars.forEach(star => {
@@ -315,20 +303,6 @@
       let fx = dxAnchor * springK;
       let fy = dyAnchor * springK;
       
-      // 3. Apply magnetic "black hole" pull if clicked recently
-      if (clickForce > 0.05) {
-        let dxCursor = targetX - star.x;
-        let dyCursor = targetY - star.y;
-        let distCursor = Math.sqrt(dxCursor * dxCursor + dyCursor * dyCursor);
-        
-        if (distCursor > 5) {
-          // Pull force balanced against the spring return
-          let magnetStrength = clickForce * 1.5;
-          fx += (dxCursor / distCursor) * magnetStrength;
-          fy += (dyCursor / distCursor) * magnetStrength;
-        }
-      }
-
       // Apply net force to velocity
       star.vx += fx;
       star.vy += fy;
